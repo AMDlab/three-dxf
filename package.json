@@ -39,12 +39,14 @@
     }
   ],
   "dependencies": {
-    "three": "^0.112.1",
     "mathjs": "^6.6.2",
-    "paralleljs": "github:AMDlab/parallel.js#v0.2.1"
+    "paralleljs": "github:parallel-js/parallel.js#master",
+    "three": "^0.112.1"
   },
   "description": "A dxf viewer for the browser using three.js. Updated for AMDlab LLC",
-  "devDependencies": {},
+  "devDependencies": {
+    "raw-loader": "^4.0.1"
+  },
   "homepage": "https://github.com/AMDlab/three-dxf/three-dxf",
   "keywords": [
     "dxf",
