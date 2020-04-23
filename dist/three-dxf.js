@@ -7,6 +7,7 @@ import { drawEntity } from 'three-dxf/dist/create-object';
  * DEFAULT OPTION for Viewer fucntion
  */
 const DEFAULT_OPT = { width: null, height: null, font: null, pan: true, rotate: true, zoom: true }
+const CONCURRENCY = 200;
 
 /**
  * Viewer class for a dxf object.
@@ -159,7 +160,6 @@ async function createObjects(data, font) {
 
   const INIT = 0;
   const MAX = data.entities.length;
-  const CONCURRENCY = 10; // 同時実行できる数を定義
 
   const generator = (function* createGenerator() {
     for (let index = INIT; index < MAX; index++) {
@@ -200,6 +200,12 @@ async function asynccParallel(iterable, concurrency) {
   return await Promise.all(promises);
 }
 
+/**
+ * @param {Object} start
+ * @param {Object} end
+ * @param {Array} finieshLines
+ * @return Array
+ */
 async function createIntersectPoint(start, end, finieshLines) {
   return new Promise((resolve) => {
     resolve(findCrossPoint(start, end, finieshLines))
@@ -207,7 +213,7 @@ async function createIntersectPoint(start, end, finieshLines) {
 }
 
 /**
- * @param {Object} lineVecs
+ * @param {Array} lineVecs
  * @return Array
  */
 async function createIntersectPoints(lines) {
@@ -215,7 +221,6 @@ async function createIntersectPoints(lines) {
 
   const INIT = 0;
   const MAX = lines.length;
-  const CONCURRENCY = 10; // 同時実行できる数を定義
 
   const generator = (function* createGenerator() {
     for (let index = INIT; index < MAX; index++) {
@@ -234,21 +239,6 @@ async function createIntersectPoints(lines) {
 
   return intersects
 }
-
-/**
- * @param {Object} lineVecs
- * @return Array
- */
-// function reformLines(lineVecs) {
-//   const reformedLineVecs = []
-//   for(let i = 0; i < lineVecs.length; i ++) {
-//     reformedLineVecs.push({
-//       index: i,
-//       lineVec: lineVecs[i]
-//     })
-//   }
-//   return reformedLineVecs
-// }
 
 /**
  * @param {Object} objs

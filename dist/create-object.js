@@ -1,4 +1,5 @@
 import * as THREE from 'three'
+import THREEx from 'three-dxf/dist/threex'
 
 /**
  * Viewer class for a dxf object.

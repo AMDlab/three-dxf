@@ -1,4 +1,6 @@
 // Three.js extension functions. Webpack doesn't seem to like it if we modify the THREE object directly.
+import * as THREE from 'three'
+
 var THREEx = { Math: {} }
 /**
  * Returns the angle in radians of the vector (p1,p2). In other words, imagine
@@ -73,4 +75,4 @@ THREEx.BulgeGeometry = function(startPoint, endPoint, bulge, segments) {
 }
 THREEx.BulgeGeometry.prototype = Object.create(THREE.Geometry.prototype)
 
-module.exports = THREEx
+export default THREEx;
