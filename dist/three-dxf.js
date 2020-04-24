@@ -7,7 +7,7 @@ import { drawEntity } from 'three-dxf/dist/create-object';
  * DEFAULT OPTION for Viewer fucntion
  */
 const DEFAULT_OPT = { width: null, height: null, font: null, pan: true, rotate: true, zoom: true }
-const CONCURRENCY = 50;
+const CONCURRENCY = 100;
 
 /**
  * Viewer class for a dxf object.
@@ -17,7 +17,7 @@ const CONCURRENCY = 50;
  * @param {Object} cEvents - additional events for three.js viewer
  * @constructor
  */
-export async function Viewer(data, parent, opt = DEFAULT_OPT, cEvents = {}) {
+export async function Viewer(data, parent, opt = DEFAULT_OPT, cEvents = {}, progressCallBack = () => {}) {
   data = createLineTypeShaders(data)
   const scene = new THREE.Scene()
   const width = opt['width'] || parent.clientWidth
@@ -26,11 +26,11 @@ export async function Viewer(data, parent, opt = DEFAULT_OPT, cEvents = {}) {
   const aspectRatio = width / height
 
   // Create scene from dxf object (data)
-  const result = await createObjects(data, font)
+  const result = await createObjects(data, font, progressCallBack)
   const objs = result.objs
 
   // Create Intersct Point
-  const intersects = await createIntersectPoints(result.lineVecs)
+  const intersects = await createIntersectPoints(result.lineVecs, progressCallBack)
 
   // Add Object to scene
   for(const obj of objs) {
@@ -134,7 +134,7 @@ export async function Viewer(data, parent, opt = DEFAULT_OPT, cEvents = {}) {
     renderer.setClearColor(0xfffffff, 1)
     this.render()
   }
-
+  progressCallBack(100)
   return {
     canvas: parent,
     raycaster: raycaster,
@@ -154,9 +154,10 @@ async function createObject(index, data, font) {
   });
 }
 
-async function createObjects(data, font) {
+async function createObjects(data, font, progressCallBack) {
   const objs = []
   let lineVecs = []
+  let progressCount = 0
 
   const INIT = 0;
   const MAX = data.entities.length;
@@ -169,6 +170,7 @@ async function createObjects(data, font) {
 
   const results = await asynccParallel(generator, CONCURRENCY);
   for(const items of results) {
+    progressCallBack(((progressCount++ / (CONCURRENCY)) * 50) - 10)
     for(const item of items) {
       const obj = item.mesh
       if (!obj) continue;
@@ -216,8 +218,9 @@ async function createIntersectPoint(start, end, finieshLines) {
  * @param {Array} lineVecs
  * @return Array
  */
-async function createIntersectPoints(lines) {
+async function createIntersectPoints(lines, progressCallBack) {
   let intersects = []
+  let progressCount = 0
 
   const INIT = 0;
   const MAX = lines.length;
@@ -232,6 +235,7 @@ async function createIntersectPoints(lines) {
 
   const results = await asynccParallel(generator, CONCURRENCY);
   for(const items of results) {
+    progressCallBack(40 + ((progressCount++ / (CONCURRENCY)) * 50))
     for(const item of items) {
       intersects = intersects.concat(item)
     }
