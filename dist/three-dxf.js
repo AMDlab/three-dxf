@@ -7,7 +7,7 @@ import { drawEntity } from 'three-dxf/dist/create-object';
  * DEFAULT OPTION for Viewer fucntion
  */
 const DEFAULT_OPT = { width: null, height: null, font: null, pan: true, rotate: true, zoom: true }
-const CONCURRENCY = 200;
+const CONCURRENCY = 50;
 
 /**
  * Viewer class for a dxf object.
