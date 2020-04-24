@@ -114,7 +114,7 @@ function drawMtext(entity, data, font) {
     // If the text ends up being wider than the box, it's supposed
     // to be multiline. Doing that in threeJS is overkill.
     if (textWidth > entity.width) {
-      console.log('Can\'t render this multipline MTEXT entity, sorry.', entity)
+      // console.log('Can\'t render this multipline MTEXT entity, sorry.', entity)
       return undefined
     }
 
@@ -383,10 +383,10 @@ function drawSolid(entity, data) {
  */
 function drawText(entity, data, font) {
   var geometry, material, text
-  if (!font)
-    return console.warn(
-      'Text is not supported without a Three.js font loaded with THREE.FontLoader! Load a font of your choice and pass this into the constructor. See the sample for this repository or Three.js examples at http://threejs.org/examples/?q=text#webgl_geometry_text for more details.'
-    )
+  // if (!font)
+  //   return console.warn(
+  //     'Text is not supported without a Three.js font loaded with THREE.FontLoader! Load a font of your choice and pass this into the constructor. See the sample for this repository or Three.js examples at http://threejs.org/examples/?q=text#webgl_geometry_text for more details.'
+  //   )
   geometry = new THREE.TextBufferGeometry(entity.text, {
     font: font,
     height: 0,

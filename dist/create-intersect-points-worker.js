@@ -59,18 +59,16 @@ export function findCrossPoint(point1, point2, finieshLines) {
       intersectY = kt
       intersectX = (kt - ko) / ao
     } else {
-      try {
-        var result = solveSimultaneousEquation(
-          [
-            [1, -1 * ao],
-            [1, -1 * at]
-          ],
-          [ko, kt]
-        )
+      const result = solveSimultaneousEquation(
+        [
+          [1, -1 * ao],
+          [1, -1 * at]
+        ],
+        [ko, kt]
+      )
+      if(result) {
         intersectX = result[1][0]
         intersectY = result[0][0]
-      } catch (ex) {
-        console.log(ex)
       }
     }
     if (
@@ -101,7 +99,13 @@ export function findCrossPoint(point1, point2, finieshLines) {
  * @return Array
  */
 function solveSimultaneousEquation(formula, results) {
-  return math.lusolve(math.matrix(formula), math.matrix(results))._data
+  try {
+    const result = math.lusolve(math.matrix(formula), math.matrix(results))._data
+    return result
+  } catch (ex) {
+    // console.log(ex);
+  }
+  return null
 }
 
 /**
@@ -125,5 +129,8 @@ function getCoefficienConst(point1, point2) {
     ],
     [point1.y, point2.y]
   )
+  if(!result) {
+    return [null, null]
+  }
   return [result[0][0], result[1][0]]
 }
